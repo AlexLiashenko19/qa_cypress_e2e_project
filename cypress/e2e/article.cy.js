@@ -16,18 +16,21 @@ describe('Article', () => {
 
   beforeEach(() => {
     cy.task('db:clear');
-    cy.task('generateUser').then((user) => {
+
+    return cy.task('generateUser').then((user) => {
       username = user.username;
       email = user.email;
       password = user.password;
 
       signInPage.visit();
-      cy.register(email, username, password);
 
-      signInPage.typeEmail(email);
-      signInPage.typePassword(password);
-
-      signInPage.clickSignInBtn();
+      return cy
+        .register(email, username, password)
+        .then(() => {
+          signInPage.typeEmail(email);
+          signInPage.typePassword(password);
+          signInPage.clickSignInBtn();
+        });
     });
   });
 

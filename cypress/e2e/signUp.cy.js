@@ -8,24 +8,17 @@ const signInPage = new SignInPageObject();
 const homePage = new HomePageObject();
 
 describe('Sign Up page', () => {
-  let username;
-  let email;
-  let password;
-
-  before(() => {});
-
   beforeEach(() => {
     cy.task('db:clear');
-    return cy.task('generateUser').then((user) => {
-      username = user.username;
-      email = user.email;
-      password = user.password;
-    });
   });
 
-  it('should sign up succefully', () => {
-    signInPage.visit();
-    cy.register(email, username, password);
+  it('should sign up successfully', () => {
+    cy.task('generateUser').then((user) => {
+      const { email, username, password } = user;
+
+      signInPage.visit();
+      cy.register(email, username, password);
+    });
   });
 
   it('should not sign up if invalid email', () => {
