@@ -16,7 +16,7 @@ describe('Sign Up page', () => {
 
   beforeEach(() => {
     cy.task('db:clear');
-    cy.task('generateUser').then((user) => {
+    return cy.task('generateUser').then((user) => {
       username = user.username;
       email = user.email;
       password = user.password;

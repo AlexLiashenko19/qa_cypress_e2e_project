@@ -11,17 +11,24 @@ describe('User', () => {
 
   before(() => {
     cy.task('db:clear');
-    cy.task('generateUser').then((generateUser) => {
-      userTarget = generateUser;
-      cy.register(userTarget.email, userTarget.username, userTarget.password);
-      userFollower = generateUser;
-      userFollower.email += 'world';
-      userFollower.username += 'follower';
-      cy.register(
-        userFollower.email,
-        userFollower.username,
-        userFollower.password
-      );
+    return cy.task('generateUser').then((generatedUser) => {
+      userTarget = { ...generatedUser };
+      return cy.register(
+        userTarget.email,
+        userTarget.username,
+        userTarget.password
+      ).then(() => {
+        userFollower = {
+          email: generatedUser.email + 'world',
+          username: generatedUser.username + 'follower',
+          password: generatedUser.password
+        };
+        return cy.register(
+          userFollower.email,
+          userFollower.username,
+          userFollower.password
+        );
+      });
     });
   });
 
